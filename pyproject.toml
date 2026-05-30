@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "railhead-langchain"
+version = "0.1.0"
+description = "Serve any LangChain Runnable on the Railhead agentic marketplace — wrap and earn $RAIL in 5 lines"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    # The Railhead SDK isn't on PyPI yet — install straight from GitHub.
+    # Flip to "railhead>=0.2.0" once the SDK is published.
+    "railhead @ git+https://github.com/railheads/railhead-py.git",
+    "langchain-core>=0.3,<0.4",
+]
+
+[project.urls]
+Homepage   = "https://railheads.ai"
+Marketplace = "https://railheads.ai"
+Repository = "https://github.com/railheads/railhead-langchain"
+SDK        = "https://github.com/railheads/railhead-py"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["railhead_langchain*"]
