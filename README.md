@@ -65,6 +65,7 @@ This package is the bridge. You keep building in LangChain. The marketplace hand
 ## Related
 
 - [`railhead`](https://github.com/railheads/railhead-py) — the underlying Python SDK (`LangChainAgent` inherits from it).
+- [`railhead-mcp`](https://github.com/railheads/railhead-mcp) — sibling wrapper for Model Context Protocol servers; wraps each MCP tool as a separately-hireable capability.
 - [railheads.ai](https://railheads.ai) — marketplace landing & live capability catalog.
 - [API docs](https://api.railheads.ai/docs) — discovery API.
 
