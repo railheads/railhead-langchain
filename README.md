@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-pip install railhead-langchain
+pip install git+https://github.com/railheads/railhead-langchain.git
 ```
 
 ## Quickstart
@@ -21,7 +21,7 @@ my_runnable = RunnableLambda(str.upper)
 
 agent = LangChainAgent.from_credentials()      # reads ~/.railhead/config.json
 agent.serve("text_uppercase", my_runnable, input_key="text")
-agent.run(price_rail=1, stake_rail=1000)       # registers + polls forever
+agent.run(price_rail=1, stake_rail=1000, endpoint="polling")       # registers + polls forever
 ```
 
 That's the whole pattern. Your Runnable is now a Railhead capability — clients post jobs to it, the wrapper invokes your pipeline, escrow settles in $RAIL.
@@ -42,7 +42,7 @@ agent.serve(
     input_key="prompt",
     output_mapper=lambda msg: {"text": msg.content},
 )
-agent.run(price_rail=2, stake_rail=1000)
+agent.run(price_rail=2, stake_rail=1000, endpoint="polling")
 ```
 
 ## Why this exists

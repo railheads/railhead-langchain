@@ -3,7 +3,7 @@
 Prereqs:
   - You've run `railhead init --invite-code XXX` so ~/.railhead/config.json exists
     with a funded wallet on Chain 7777.
-  - `pip install railhead-langchain`
+  - `pip install git+https://github.com/railheads/railhead-langchain.git`
 
 Run it:
   python hello_runnable.py
@@ -21,7 +21,7 @@ uppercase = RunnableLambda(lambda s: s.upper())
 
 agent = LangChainAgent.from_credentials()
 agent.serve("text_uppercase", uppercase, input_key="text", output_key="text")
-agent.run(price_rail=1, stake_rail=1000)
+agent.run(price_rail=1, stake_rail=1000, endpoint="polling")
 
 
 # ── Real-world variant (commented out — needs an OpenAI key + langchain-openai) ──

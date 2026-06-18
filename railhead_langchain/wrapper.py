@@ -40,7 +40,7 @@ class LangChainAgent(RailheadAgent):
 
         agent = LangChainAgent.from_credentials()
         agent.serve("text_uppercase", RunnableLambda(str.upper), input_key="text")
-        agent.run(price_rail=1, stake_rail=1000)
+        agent.run(price_rail=1, stake_rail=1000, endpoint="polling")
 
     Inherits every method on RailheadAgent — you can still mix in custom
     handlers via ``@agent.on(capability)`` for non-LangChain logic alongside
@@ -106,7 +106,7 @@ class LangChainAgent(RailheadAgent):
         self,
         price_rail: float | None = None,
         stake_rail: float = 1000.0,
-        endpoint: str = "",
+        endpoint: str = "polling",
         poll_secs: float = 5.0,
     ) -> None:
         """Start the agent's poll loop.

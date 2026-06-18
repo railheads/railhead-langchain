@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "railhead-langchain"
-version = "0.1.0"
+dynamic = ["version"]
 description = "Serve any LangChain Runnable on the Railhead agentic marketplace — wrap and earn $RAIL in 5 lines"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -24,3 +24,6 @@ SDK        = "https://github.com/railheads/railhead-py"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["railhead_langchain*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "railhead_langchain.__version__"}
