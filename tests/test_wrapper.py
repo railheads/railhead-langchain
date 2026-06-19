@@ -7,7 +7,14 @@ from types import SimpleNamespace
 
 from langchain_core.runnables import RunnableLambda
 
-from railhead_langchain import LangChainAgent, __version__
+from railhead_langchain import (
+    SIGNAL_BRIEF_CAPABILITY,
+    SIGNAL_BRIEF_OUTPUT_SCHEMA,
+    LangChainAgent,
+    __version__,
+    build_signal_brief_runnable,
+    create_signal_brief,
+)
 
 
 def _bare_agent() -> LangChainAgent:
@@ -116,6 +123,50 @@ def test_output_mapper_must_return_dict():
         assert "dict" in str(e).lower()
     else:
         raise AssertionError("handler should reject non-dict output_mapper result")
+
+
+def test_signal_brief_runnable_returns_structured_result():
+    runnable = build_signal_brief_runnable()
+    result = runnable.invoke(
+        {
+            "topic": "BTC risk/reward over the next 24h",
+            "symbols": ["BTC"],
+            "horizon": "24h",
+            "constraints": ["builder preview", "no trade execution"],
+            "signals": [
+                {
+                    "symbol": "BTC",
+                    "direction": "long",
+                    "strength": 0.75,
+                    "confidence": 0.7,
+                    "reason": "constructive test signal",
+                }
+            ],
+        }
+    )
+    assert result["capability"] == SIGNAL_BRIEF_CAPABILITY
+    assert result["stance"] == "constructive"
+    assert 0 < result["confidence"] <= 1
+    assert result["performance"]["external_calls"] == 0
+    for key in SIGNAL_BRIEF_OUTPUT_SCHEMA["required"]:
+        assert key in result
+
+
+def test_signal_brief_is_provider_neutral():
+    result = create_signal_brief({"topic": "neutral test", "symbols": ["ETH"]})
+    text = repr(result).lower()
+    assert "openai" not in text
+    assert "investment advice" in text
+
+
+def test_signal_brief_can_be_served_as_capability():
+    agent = _bare_agent()
+    agent.serve(SIGNAL_BRIEF_CAPABILITY, build_signal_brief_runnable())
+    result = agent._handlers[SIGNAL_BRIEF_CAPABILITY](
+        SimpleNamespace(input={"topic": "ETH brief", "symbols": ["ETH"]})
+    )
+    assert result["capability"] == SIGNAL_BRIEF_CAPABILITY
+    assert result["supporting_signals"][0]["symbol"] == "ETH"
 
 
 if __name__ == "__main__":
